@@ -1,15 +1,14 @@
 import { writable, type Writable } from "svelte/store";
 import type { User } from "../models";
 
-const IS_CSR: boolean = localStorage !== undefined && document !== undefined;
+const isBrowser = typeof Storage !== "undefined";
 
 /**
  * Like a regular svelte store, but it saves to localStorage when CSR.
  */
 function localStorageStore<T>(key: string): Writable<T> {
   const { subscribe, set, update } = writable<T>();
-
-  if (IS_CSR) {
+  if (isBrowser) {
     const storedValue = localStorage.getItem(key);
     if (storedValue !== null) {
       set(JSON.parse(storedValue));
@@ -19,7 +18,7 @@ function localStorageStore<T>(key: string): Writable<T> {
 
   function setAndPersist(value: T) {
     set(value);
-    if (!IS_CSR) {
+    if (!isBrowser) {
       return;
     }
 
@@ -39,7 +38,7 @@ function localStorageStore<T>(key: string): Writable<T> {
 function cookieStore(name: string): Writable<string> {
   const { subscribe, set, update } = writable<string>();
 
-  if (IS_CSR) {
+  if (isBrowser) {
     const cookieValue = document.cookie
       .split("; ")
       .find((row) => row.startsWith(`${name}=`));
