@@ -3,6 +3,9 @@
   let password: string = "";
 
   function validatePassword(): string {
+    if (password.length < 1) {
+      return "";
+    }
     const errorMessages: string[] = [];
     if (password.length < 8) {
       errorMessages.push("be at least 8 characters long");

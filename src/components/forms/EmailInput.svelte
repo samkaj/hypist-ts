@@ -3,6 +3,9 @@
   let email: string = "";
 
   function validateEmail(): string {
+    if (email.length < 1) {
+      return "";
+    }
     const elem = document.getElementById("email") as HTMLObjectElement;
     if (!elem.checkValidity()) {
       return "Enter a valid email address.";
