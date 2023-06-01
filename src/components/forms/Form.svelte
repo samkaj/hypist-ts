@@ -1,10 +1,14 @@
 <script lang="ts">
-  export let submit: () => void;
+  export let submit: (e: SubmitEvent) => void;
   export let title: string;
   export let description: string;
+
+  function foo(e: FormDataEvent) {
+    console.log(e);
+  }
 </script>
 
-<main class="flex-row mx-auto border rounded-md py-4 px-3 max-w-md w-full">
+<main class="flex-row shadow-2xl shadow-indigo-100 mx-auto border rounded-md py-4 px-3 max-w-md w-full">
   <h1 class="text-3xl text-center my-1">{title}</h1>
   <p class="text-xl text-center text-gray-500">{description}</p>
   <hr class="my-2">
