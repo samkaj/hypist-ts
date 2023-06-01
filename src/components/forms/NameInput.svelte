@@ -3,7 +3,17 @@
   let username: string = "";
 
   function validateUsername(): string {
-    return username.length > 3 ? "" : "Too short.";
+    const regex: RegExp = /^[a-zA-Z0-9]*$/
+    if (!regex.test(username)) {
+      return "Name may only contain letters and numbers."
+    }
+    if (username.length > 32) {
+      return "Name may at most be 32 characters long."
+    }
+    if (username.length < 4) {
+      return "Name must be at least be 4 characters long."
+    }
+    return "";
   }
 </script>
 

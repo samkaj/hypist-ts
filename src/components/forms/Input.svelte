@@ -22,6 +22,7 @@
   }}
   {placeholder}
   bind:value={val}
+  id={id}
 />
 {#if errorMessage !== ""}
   <p class="ease-in-out italic text-sm mt-2 px-2 text-red-400">{errorMessage}</p>
