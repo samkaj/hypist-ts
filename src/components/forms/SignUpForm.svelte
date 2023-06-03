@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from "svelte";
   import {
     isEmailUnique,
     isNameUnique,
@@ -9,6 +10,7 @@
   import NameInput from "./NameInput.svelte";
   import PasswordInput from "./PasswordInput.svelte";
   import SubmitInput from "./SubmitInput.svelte";
+    import { userStore } from "../../stores/Store";
   const nameId = "name";
   const emailId = "email";
   const passwordId = "password";
@@ -37,11 +39,19 @@
       email: email.value,
       password: password.value,
     })
-      .then((res) => {
+      .then(() => {
+        window.location.href = "/signin";
       })
       .catch(() => {
+        unexpectedErrorOccured = true;
       });
   }
+
+  onMount(() => {
+    if ($userStore) {
+      window.location.href = "/";
+    }
+  });
 </script>
 
 <Form

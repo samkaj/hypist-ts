@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// TODO: move to constants file
 const backendUri: string = import.meta.env.VITE_BACKEND_URI ?? "";
 
 type SignUpBody = {
