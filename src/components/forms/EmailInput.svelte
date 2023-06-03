@@ -1,5 +1,6 @@
 <script lang="ts">
   import Input from "./Input.svelte";
+  export let emailId: string;
   let email: string = "";
 
   function validateEmail(): string {
@@ -17,7 +18,7 @@
 <Input
   bind:val={email}
   label="Email"
-  id="email"
+  id={emailId}
   type="email"
   validate={validateEmail}
   placeholder="example@mail.com"

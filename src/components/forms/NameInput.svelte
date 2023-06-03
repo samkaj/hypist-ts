@@ -1,5 +1,6 @@
 <script lang="ts">
   import Input from "./Input.svelte";
+  export let nameId: string;
   let username: string = "";
 
   function validateUsername(): string {
@@ -23,7 +24,7 @@
 <Input
   bind:val={username}
   label="Username"
-  id="username"
+  id={nameId}
   type="text"
   validate={validateUsername}
   placeholder="Username"
