@@ -4,8 +4,8 @@
   import SubmitInput from "./SubmitInput.svelte";
   import EmailInput from "./EmailInput.svelte";
   import { signIn } from "../../consumers/SignInConsumer";
-    import { onMount } from "svelte/types/runtime/internal/lifecycle";
-    import { userStore } from "../../stores/Store";
+  import { onMount } from "svelte";
+  import { userStore } from "../../stores/Store";
   let signInSucceeded: boolean = false;
   const emailId = "email";
   const passwordId = "password";
@@ -17,7 +17,7 @@
       email: email.value,
       password: password.value,
     });
-    if (signInSucceeded){
+    if (signInSucceeded) {
       window.location.href = "/";
     }
   }
@@ -26,7 +26,7 @@
     if ($userStore) {
       window.location.href = "/";
     }
-  })
+  });
 </script>
 
 <Form
