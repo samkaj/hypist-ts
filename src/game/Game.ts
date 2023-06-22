@@ -1,4 +1,4 @@
-import type { Word } from "./Word";
+import { Word } from "./Word";
 
 export class Game {
   private startTimeMs: number = 0;
@@ -37,6 +37,8 @@ export class Game {
   reset(): void {
     this.startTimeMs = 0;
     this.wordIndex = 0;
+    const r = Math.random() * 10;
+    this.words = [new Word(r + "")];
   }
 
   gameOver(): void {
