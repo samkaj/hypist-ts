@@ -6,8 +6,8 @@ export class Game {
   private wordIndex: number = 0;
   words: Word[];
 
-  constructor(words: Word[]) {
-    this.words = words;
+  constructor() {
+    this.words = getRandomWords()
   }
 
   start(): void {
@@ -37,8 +37,7 @@ export class Game {
   reset(): void {
     this.startTimeMs = 0;
     this.wordIndex = 0;
-    const r = Math.random() * 10;
-    this.words = [new Word(r + "")];
+    this.words = getRandomWords();
   }
 
   gameOver(): void {
@@ -46,4 +45,8 @@ export class Game {
     console.log(`The test took ${this.elapsedMs / 1000} s.`);
     this.reset();
   }
+}
+
+const getRandomWords = (): Word[] => {
+  return "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ").map((w) => new Word(w));
 }

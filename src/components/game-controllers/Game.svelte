@@ -1,25 +1,19 @@
 <script lang="ts">
   import { Game } from "../../game/Game";
-  import { Word } from "../../game/Word";
-  let wordz: Word[] = ["this", "bitch", "empty", "yeet"].map(
-    (word) => new Word(word)
-  );
-  const fooGame = new Game(wordz);
-  let typer: string
+  const typingTest = new Game();
+  let currentInput: string;
 
   function handleInput(e: any) {
     const input: string = e.target.value;
-    console.log("handleInput");
-    fooGame.handleWord(input);
-    wordz = fooGame.words;
+    typingTest.handleWord(input);
     if (input.endsWith(" ")) {
       e.target.value = "";
     }
   }
 
   function reset() {
-    fooGame.reset();
-    wordz = fooGame.words;
+    typingTest.reset();
+    currentInput = "";
   }
 
   function onKeyDown(e: KeyboardEvent) {
@@ -38,15 +32,19 @@
 </script>
 
 <h1>This is game</h1>
-<input type="text" bind:value={typer} placeholder="Start writing boy" on:input={(e) => handleInput(e)} />
+<input
+  type="text"
+  bind:value={currentInput}
+  on:input={handleInput}
+/>
 <button
   on:click={() => {
-    fooGame.start();
+    typingTest.start();
   }}>Start game</button
 >
 <button
   on:click={() => {
-    fooGame.gameOver();
+    typingTest.gameOver();
   }}>Game over</button
 >
 <button
@@ -54,7 +52,7 @@
     reset();
   }}>Reset game</button
 >
-{#each wordz as word}
+{#each typingTest.words as word}
   <p class={qnd[word.status]}>{word.value}</p>
 {/each}
 
