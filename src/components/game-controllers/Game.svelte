@@ -5,9 +5,11 @@
     (word) => new Word(word)
   );
   const fooGame = new Game(wordz);
+  let typer: string
 
   function handleInput(e: any) {
     const input: string = e.target.value;
+    console.log("handleInput");
     fooGame.handleWord(input);
     wordz = fooGame.words;
     if (input.endsWith(" ")) {
@@ -21,8 +23,9 @@
   }
 
   function onKeyDown(e: KeyboardEvent) {
-    switch(e.key) {
-      case "Escape": reset();
+    switch (e.key) {
+      case "Escape":
+        reset();
     }
   }
 
@@ -35,7 +38,7 @@
 </script>
 
 <h1>This is game</h1>
-<input type="text" placeholder="Start writing boy" on:input={handleInput} />
+<input type="text" bind:value={typer} placeholder="Start writing boy" on:input={(e) => handleInput(e)} />
 <button
   on:click={() => {
     fooGame.start();
@@ -55,4 +58,4 @@
   <p class={qnd[word.status]}>{word.value}</p>
 {/each}
 
-<svelte:window on:keydown|preventDefault={onKeyDown} />
+<svelte:window on:keydown={onKeyDown} />
