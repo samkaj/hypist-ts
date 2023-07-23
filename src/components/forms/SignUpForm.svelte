@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+  import { onMount } from "svelte";
   import {
     isEmailUnique,
     isNameUnique,
@@ -10,7 +10,7 @@
   import NameInput from "./NameInput.svelte";
   import PasswordInput from "./PasswordInput.svelte";
   import SubmitInput from "./SubmitInput.svelte";
-    import { userStore } from "../../stores/Store";
+  import { userStore } from "../../stores/Store";
   const nameId = "name";
   const emailId = "email";
   const passwordId = "password";

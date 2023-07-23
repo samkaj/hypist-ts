@@ -1,4 +1,4 @@
-enum Status {
+export enum Status {
   Inactive,
   Active,
   Correct,
@@ -42,5 +42,13 @@ export class Word {
       return;
     }
     this.status = Status.Incorrect;
+  }
+
+  isCorrect(): boolean {
+    return this.status === Status.Correct;
+  }
+
+  isHandled(): boolean {
+    return this.status === Status.Correct || this.status === Status.Incorrect;
   }
 }

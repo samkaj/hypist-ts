@@ -1,19 +1,46 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { Game } from "../../game/Game";
-  const typingTest = new Game();
-  let currentInput: string;
+  import type { Word } from "../../game/Word";
+  import { Status } from "../../game/Word";
+  const game = new Game(10);
+  let words: Word[] = game.words;
+  let typingInput: HTMLInputElement;
+  const statuses = new Map<Status, string>([
+    [Status.Inactive, "text-gray-600"],
+    [Status.Active, "text-blue-600"],
+    [Status.Correct, "text-green-600"],
+    [Status.Incorrect, "text-red-600"],
+  ]);
+
+  onMount(() => typingInput.focus());
 
   function handleInput(e: any) {
-    const input: string = e.target.value;
-    typingTest.handleWord(input);
+    let input: string = e.target.value;
+    if (input.trim() === "") {
+      e.target.value = "";
+      return;
+    }
+
+    if (!game.isStarted) {
+      game.start();
+    }
+
+    if (game.isLastWordAndCorrect(input)) {
+      input += " ";
+    }
+
+    game.handleWord(input);
     if (input.endsWith(" ")) {
       e.target.value = "";
     }
+    words = game.words;
   }
 
   function reset() {
-    typingTest.reset();
-    currentInput = "";
+    game.reset();
+    words = game.words;
+    typingInput.value = "";
   }
 
   function onKeyDown(e: KeyboardEvent) {
@@ -22,38 +49,19 @@
         reset();
     }
   }
-
-  const qnd = [
-    "text-gray-600",
-    "text-blue-600",
-    "text-green-600",
-    "text-red-600",
-  ];
 </script>
 
-<h1>This is game</h1>
 <input
+  bind:this={typingInput}
   type="text"
-  bind:value={currentInput}
   on:input={handleInput}
+  id="typing-input"
 />
-<button
-  on:click={() => {
-    typingTest.start();
-  }}>Start game</button
->
-<button
-  on:click={() => {
-    typingTest.gameOver();
-  }}>Game over</button
->
-<button
-  on:click={() => {
-    reset();
-  }}>Reset game</button
->
-{#each typingTest.words as word}
-  <p class={qnd[word.status]}>{word.value}</p>
+<br />
+{#each words as word}
+  <span class={`text-xl ease-in-out duration-100 ${statuses.get(word.status)}`}
+    >{word.value}
+  </span>
 {/each}
 
 <svelte:window on:keydown={onKeyDown} />

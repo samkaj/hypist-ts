@@ -38,4 +38,3 @@ async function isFieldUnique(
     .then(() => false)
     .catch(() => true);
 }
-

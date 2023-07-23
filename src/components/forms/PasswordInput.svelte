@@ -23,7 +23,9 @@
     if (!password.match(/[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/)) {
       errorMessages.push("contain at least one special character");
     }
-    return errorMessages.length > 0 ? `Password must ${joinAndEndWithAnd(errorMessages)}.` : "";
+    return errorMessages.length > 0
+      ? `Password must ${joinAndEndWithAnd(errorMessages)}.`
+      : "";
   }
 
   function joinAndEndWithAnd(words: string[]) {

@@ -1,17 +1,24 @@
-import { Word } from "./Word";
+import generateWords from "./WordGenerator";
+import type { Word } from "./Word";
 
 export class Game {
   private startTimeMs: number = 0;
   private elapsedMs: number = 0;
   private wordIndex: number = 0;
+  private wordCount: number = 100;
+  isStarted: boolean = false;
   words: Word[];
 
-  constructor() {
-    this.words = getRandomWords()
+  constructor(wordCount: number) {
+    this.wordCount = wordCount;
+    this.words = generateWords(wordCount);
+    this.words[0].activate();
   }
 
   start(): void {
+    this.getCurrentWord().activate();
     this.startTimeMs = Date.now();
+    this.isStarted = true;
   }
 
   handleWord(input: string): void {
@@ -21,12 +28,23 @@ export class Game {
     }
   }
 
+  isFinished(): boolean {
+    return this.words[this.words.length - 1].isHandled();
+  }
+
+  isLastWordAndCorrect(input: string): boolean {
+    const isLastWord = this.wordIndex === this.words.length - 1;
+    const isCorrect = this.words[this.wordIndex].value === input;
+    return isLastWord && isCorrect;
+  }
+
   getCurrentWord(): Word {
     return this.words[this.wordIndex];
   }
 
   nextWord(): void {
     if (this.words.length - 1 === this.wordIndex) {
+      this.getCurrentWord();
       this.gameOver();
       return;
     }
@@ -34,19 +52,21 @@ export class Game {
     this.getCurrentWord().activate();
   }
 
+  getWpm(elapsedMs: number): number {
+    const elapsedMins = elapsedMs / (1000 * 60);
+    const correctAmount = this.words.filter((w) => w.isCorrect()).length;
+    return correctAmount / elapsedMins;
+  }
+
   reset(): void {
     this.startTimeMs = 0;
     this.wordIndex = 0;
-    this.words = getRandomWords();
+    this.words = generateWords(this.wordCount);
+    this.isStarted = false;
+    this.getCurrentWord().activate();
   }
 
   gameOver(): void {
     this.elapsedMs = Date.now() - this.startTimeMs;
-    console.log(`The test took ${this.elapsedMs / 1000} s.`);
-    this.reset();
   }
-}
-
-const getRandomWords = (): Word[] => {
-  return "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(" ").map((w) => new Word(w));
 }
