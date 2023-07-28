@@ -1,13 +1,16 @@
 import { writable, type Writable } from "svelte/store";
-import type { User } from "../models";
+import type { Settings, User } from "../models";
 
 const isBrowser = typeof Storage !== "undefined";
 
 /**
  * Like a regular svelte store, but it saves to localStorage when CSR.
  */
-function localStorageStore<T>(key: string): Writable<T> {
-  const { subscribe, set, update } = writable<T>();
+function localStorageStore<T>(
+  key: string,
+  defaultValue: T | undefined = undefined
+): Writable<T> {
+  const { subscribe, set, update } = writable<T>(defaultValue);
   if (isBrowser) {
     const storedValue = localStorage.getItem(key);
     if (storedValue !== null) {
@@ -69,3 +72,6 @@ function cookieStore(name: string): Writable<string> {
 
 export const userStore = localStorageStore<User>("user");
 export const tokenStore = cookieStore("token");
+export const settingsStore = localStorageStore<Settings>("settings", {
+  wordCount: 50,
+});
