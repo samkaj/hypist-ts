@@ -3,9 +3,12 @@
   import { Game } from "../../game/Game";
   import type { Word } from "../../game/Word";
   import { Status } from "../../game/Word";
-  const game = new Game(50);
-  let words: Word[] = game.words;
+  import { settingsStore } from "../../stores/Store";
+
+  const game = new Game($settingsStore.wordCount);
   let typingInput: HTMLInputElement;
+  let words: Word[] = game.words;
+
   const statuses = new Map<Status, string>([
     [Status.Inactive, "text-gray-400"],
     [Status.Active, "text-gray-600"],
@@ -43,11 +46,14 @@
     typingInput.value = "";
   }
 
-
   function onKeyDown(e: KeyboardEvent) {
     switch (e.key) {
       case "Escape":
         reset();
+      default:
+        if (typingInput !== document.activeElement) {
+          typingInput.focus();
+        }
     }
   }
 </script>
@@ -55,7 +61,9 @@
 <div class="w-3/4 mx-auto bg-gray-100 p-3 rounded-lg mt-2">
   {#each words as word}
     <span
-      class={`text-xl ease-in-out duration-200 select-none ${statuses.get(word.status)}`}
+      class={`text-xl ease-in-out duration-200 select-none ${statuses.get(
+        word.status
+      )}`}
       >{word.value + " "}
     </span>
   {/each}
