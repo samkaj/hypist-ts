@@ -68,7 +68,7 @@
   }
 </script>
 
-<main class="w-3/4 mx-auto flex flex-col space-y-2 mt-2">
+<main class="max-w-3xl mx-auto flex flex-col space-y-2 mt-2">
   <SettingsPane />
   <div class="mx-auto bg-gray-100 p-3 rounded-lg">
     {#each words as word}
