@@ -1,13 +1,23 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import SettingsPane from "./SettingsPane.svelte";
+  import { onDestroy, onMount } from "svelte";
   import { Game } from "../../game/Game";
   import type { Word } from "../../game/Word";
   import { Status } from "../../game/Word";
   import { settingsStore } from "../../stores/Store";
 
-  const game = new Game($settingsStore.wordCount);
+  let game = new Game($settingsStore.wordCount);
   let typingInput: HTMLInputElement;
   let words: Word[] = game.words;
+
+  const unsubscribe = settingsStore.subscribe((newSettings) => {
+    if (newSettings.wordCount !== game.words.length) {
+      game.setWordCount(newSettings.wordCount);
+      reset();
+    }
+  });
+
+  onDestroy(unsubscribe);
 
   const statuses = new Map<Status, string>([
     [Status.Inactive, "text-gray-400"],
@@ -51,29 +61,31 @@
       case "Escape":
         reset();
       default:
-        if (typingInput !== document.activeElement) {
+        if (typingInput && typingInput !== document.activeElement) {
           typingInput.focus();
         }
     }
   }
 </script>
 
-<div class="w-3/4 mx-auto bg-gray-100 p-3 rounded-lg mt-2">
-  {#each words as word}
-    <span
-      class={`text-xl ease-in-out duration-200 select-none ${statuses.get(
-        word.status
-      )}`}
-      >{word.value + " "}
-    </span>
-  {/each}
-  <input
-    bind:this={typingInput}
-    type="text"
-    on:input={handleInput}
-    id="typing-input"
-    class="text-xl w-full text-gray-600 p-1 border-none rounded-lg mt-2 focus:ring-transparent focus:outline-none"
-  />
-</div>
-
+<main class="w-3/4 mx-auto flex flex-col space-y-2 mt-2">
+  <SettingsPane />
+  <div class="mx-auto bg-gray-100 p-3 rounded-lg">
+    {#each words as word}
+      <span
+        class={`text-xl ease-in-out duration-200 select-none ${statuses.get(
+          word.status
+        )}`}
+        >{word.value + " "}
+      </span>
+    {/each}
+    <input
+      bind:this={typingInput}
+      type="text"
+      on:input={handleInput}
+      id="typing-input"
+      class="text-xl w-full text-gray-600 p-1 border-none rounded-lg mt-2 focus:ring-transparent focus:outline-none"
+    />
+  </div>
+</main>
 <svelte:window on:keydown={onKeyDown} />

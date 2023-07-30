@@ -69,4 +69,8 @@ export class Game {
   gameOver(): void {
     this.elapsedMs = Date.now() - this.startTimeMs;
   }
+
+  setWordCount(count: number) {
+    this.wordCount = count;
+  }
 }
