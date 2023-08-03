@@ -1,5 +1,5 @@
 import { writable, type Writable } from "svelte/store";
-import type { Settings, User } from "../models";
+import { Gamemode, type Settings, type User } from "../models";
 
 const isBrowser = typeof Storage !== "undefined";
 
@@ -75,4 +75,5 @@ export const tokenStore = cookieStore("token");
 export const settingsStore = localStorageStore<Settings>("settings", {
   wordCount: 50,
   duration: 30,
+  gamemode: Gamemode.Words,
 });
