@@ -74,4 +74,5 @@ export const userStore = localStorageStore<User>("user");
 export const tokenStore = cookieStore("token");
 export const settingsStore = localStorageStore<Settings>("settings", {
   wordCount: 50,
+  duration: 30,
 });

@@ -981,7 +981,6 @@ const words: string[] = [
   "bar",
   "offer",
   "segment",
-  "slave",
   "duck",
   "instant",
   "market",
