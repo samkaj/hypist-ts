@@ -5,8 +5,9 @@
   import type { Word } from "../../game/Word";
   import { Status } from "../../game/Word";
   import { settingsStore } from "../../stores/Store";
+  import { Gamemode } from "../../models";
 
-  let game = new Game($settingsStore.wordCount);
+  let game = new Game($settingsStore.wordCount, $settingsStore.gamemode);
   let typingInput: HTMLInputElement;
   let words: Word[] = game.words;
 

@@ -1,18 +1,21 @@
 import generateWords from "./WordGenerator";
 import type { Word } from "./Word";
+import { Gamemode } from "../models";
 
 export class Game {
   private startTimeMs: number = 0;
   private elapsedMs: number = 0;
   private wordIndex: number = 0;
   private wordCount: number = 100;
+  private gamemode: Gamemode;
   isStarted: boolean = false;
   words: Word[];
 
-  constructor(wordCount: number) {
+  constructor(wordCount: number, gamemode: Gamemode) {
     this.wordCount = wordCount;
     this.words = generateWords(wordCount);
     this.words[0].activate();
+    this.gamemode = gamemode;
   }
 
   start(): void {
@@ -38,11 +41,27 @@ export class Game {
     return isLastWord && isCorrect;
   }
 
+  addWords(count: number) {
+    this.words = this.words.concat(generateWords(count));
+  }
+
   getCurrentWord(): Word {
     return this.words[this.wordIndex];
   }
 
+  private setGamemode(gamemode: Gamemode): void {
+    this.gamemode = gamemode;
+  }
+
+  switchGamemode(gamemode: Gamemode): void {
+    this.setGamemode(gamemode);
+    this.reset();
+  }
+
   nextWord(): void {
+    if (this.gamemode === Gamemode.Timed && this.wordIndex % 3 === 0) {
+      this.addWords(10);
+    }
     if (this.words.length - 1 === this.wordIndex) {
       this.getCurrentWord();
       this.gameOver();
