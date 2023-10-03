@@ -1,6 +1,7 @@
 <script lang="ts">
   import Input from "./Input.svelte";
   export let passwordId: string;
+  export let passwordHint = "";
   let password: string = "";
 
   function validatePassword(): string {
@@ -39,5 +40,5 @@
   id={passwordId}
   type="password"
   validate={validatePassword}
-  placeholder="Enter a secure password"
+  placeholder={passwordHint}
 />

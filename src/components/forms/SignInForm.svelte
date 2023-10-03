@@ -35,7 +35,7 @@
   submit={trySignIn}
 >
   <EmailInput {emailId} />
-  <PasswordInput {passwordId} />
+  <PasswordInput {passwordId} passwordHint={"Enter your password"}/>
   <SubmitInput text="Sign in" />
   {#if !signInSucceeded}
     <p class="italic text-sm mt-2 px-2 text-red-400">

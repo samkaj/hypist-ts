@@ -77,7 +77,7 @@
       Email unavailable, try another or sign in
     </p>
   {/if}
-  <PasswordInput {passwordId} />
+  <PasswordInput {passwordId} passwordHint={"Enter a secure password"} />
   <SubmitInput text="Create account" />
   <hr class="mt-4 mb-2" />
   <p class="text-center text-gray-600 text-sm mt-4">
