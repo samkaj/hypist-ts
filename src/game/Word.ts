@@ -11,9 +11,7 @@ class Word {
   index: number;
 
   constructor(value: string) {
-    this.value = value.split("").map((letter) => {
-      return new Letter(letter);
-    });
+    this.value = value.split("").map((letter) => new Letter(letter));
     this.state = State.INACTIVE;
     this.index = 0;
   }
@@ -37,7 +35,7 @@ class Word {
     this.setCurrentLetterState(
       want === input ? State.CORRECT : State.INCORRECT
     );
-    
+
     const isLast = this.index === this.value.length - 1;
     if (isLast) {
       this.validate();
@@ -47,8 +45,25 @@ class Word {
     this.setNextLetterState(State.ACTIVE);
   }
 
-  private validate() {
-    const isCorrect = this.value.every((letter) => letter.state === State.CORRECT);
+  public isInactive() {
+    return this.value.every((val) => val.state === State.INACTIVE);
+  }
+
+  public handleDeletion() {
+    this.setCurrentLetterState(State.INACTIVE);
+    this.index--;
+    if (this.index >= 0) {
+      this.setCurrentLetterState(State.ACTIVE);
+      return;
+    }
+    this.setCurrentLetterState(State.INACTIVE);
+    this.index = 0;
+  }
+
+  public validate() {
+    const isCorrect = this.value.every(
+      (letter) => letter.state === State.CORRECT
+    );
     this.setState(isCorrect ? State.CORRECT : State.INCORRECT);
   }
 
@@ -62,7 +77,7 @@ class Word {
 
   private setNextLetterState(state: State) {
     if (this.index < this.value.length - 1) {
-      this.value[this.index+1].setState(state);
+      this.value[this.index + 1].setState(state);
     }
   }
 }

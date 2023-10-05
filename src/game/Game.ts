@@ -1,10 +1,6 @@
 import type Word from "./Word";
 
-
-/*
- * Base class for a game.
- * */
-class Game {
+export default class Game {
   private words: Array<Word>;
   private index: number;
 
@@ -24,5 +20,24 @@ class Game {
     }
     return null;
   }
-}
 
+  handleInput(keycode: string) {
+    switch (keycode) {
+      case "Backspace":
+        this.words[this.index].handleDeletion();
+        if (this.current().isInactive()) {
+          this.index--;
+        }
+
+        if (this.index < 0) {
+          this.index = 0;
+          this.words[this.index].activate();
+        }
+      case "Space":
+        this.words[this.index].validate();
+        this.index++;
+      default:
+        this.words[this.index];
+    }
+  }
+}
