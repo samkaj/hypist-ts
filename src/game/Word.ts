@@ -16,16 +16,15 @@ class Word {
     this.index = 0;
   }
 
-  public setState(state: State) {
-    this.state = state;
-  }
-
   public activate() {
     this.setState(State.ACTIVE);
   }
 
   public handleInput(input: string) {
-    this.index++;
+    if (this.state == State.INACTIVE) {
+      this.activate();
+    }
+
     if (this.index >= this.value.length) {
       this.setState(State.INCORRECT);
       return;
@@ -36,7 +35,12 @@ class Word {
       want === input ? State.CORRECT : State.INCORRECT
     );
 
+    if (want !== input) {
+      this.setState(State.INCORRECT);
+    }
+
     const isLast = this.index === this.value.length - 1;
+    this.index++;
     if (isLast) {
       this.validate();
       return;
@@ -79,6 +83,10 @@ class Word {
     if (this.index < this.value.length - 1) {
       this.value[this.index + 1].setState(state);
     }
+  }
+
+  private setState(state: State) {
+    this.state = state;
   }
 }
 
