@@ -60,8 +60,9 @@ class Word {
       this.setCurrentLetterState(State.ACTIVE);
       return;
     }
-    this.setCurrentLetterState(State.INACTIVE);
     this.index = 0;
+    this.setCurrentLetterState(State.INACTIVE);
+    this.setState(State.INACTIVE);
   }
 
   public validate() {
@@ -71,7 +72,7 @@ class Word {
     this.setState(isCorrect ? State.CORRECT : State.INCORRECT);
   }
 
-  private getCurrentLetter(): Letter {
+  public getCurrentLetter(): Letter {
     return this.value[this.index];
   }
 

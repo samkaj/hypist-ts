@@ -73,4 +73,44 @@ describe("handle input", () => {
     anotherWord.handleInput("o");
     expect(anotherWord.state).toEqual(State.CORRECT);
   });
+
+  it("accepts empty words", ()=> {
+    const word: Word = new Word("");
+    word.handleInput("a");
+    expect(word.state).toEqual(State.INCORRECT);
+  })
+});
+
+describe("handle deletion", () => {
+  it("decrements index", () => {
+    const word: Word = new Word("hello");
+    word.handleInput("h");
+    expect(word.index).toEqual(1);
+    word.handleDeletion();
+    expect(word.index).toEqual(0);
+  });
+
+  it("does not induce negative index", ()=>{
+    const word: Word = new Word("hello");
+    word.handleDeletion();
+    expect(word.index).toEqual(0);
+  });
+
+  it("sets current to inactive and previous to active", () => {
+    const word: Word = new Word("hello");
+    word.handleInput("h");
+    word.handleInput("e");
+    word.handleDeletion();
+    expect(word.getCurrentLetter().value).toEqual("e");
+    expect(word.getCurrentLetter().state).toEqual(State.ACTIVE);
+    expect(word.value[0].state).toEqual(State.CORRECT);
+  });
+
+  it("deactivates when whole word is deleted", ()=>{
+    const word: Word = new Word("hello");
+    word.handleInput("h");
+    word.handleDeletion();
+    word.handleDeletion();
+    expect(word.state).toBe(State.INACTIVE);
+  });
 });
