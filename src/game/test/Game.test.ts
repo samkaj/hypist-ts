@@ -1,9 +1,6 @@
-import Game from "./Game";
-import Word, { State } from "./Word";
-
-const createWords = (sentence: string): Array<Word> => {
-  return sentence.split(" ").map((s) => new Word(s));
-};
+import Game from "../Game";
+import Word, { State } from "../Word";
+import { createWords } from "./TestHelper";
 
 describe("game logic", () => {
   it("handles letter input", () => {

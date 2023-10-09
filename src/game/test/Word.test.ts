@@ -1,4 +1,4 @@
-import Word, { State } from "./Word";
+import Word, { State } from "../Word";
 
 describe("handle input", () => {
   it("constructor", () => {
