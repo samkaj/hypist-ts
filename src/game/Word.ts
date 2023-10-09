@@ -9,18 +9,25 @@ class Word {
   value: Array<Letter>;
   state: State;
   index: number;
+  input: string;
 
   constructor(value: string) {
     this.value = value.split("").map((letter) => new Letter(letter));
     this.state = State.INACTIVE;
     this.index = 0;
+    this.input = "";
   }
 
   public activate() {
-    this.setState(State.ACTIVE);
+    if (this.value.length > 0) {
+      this.setState(State.ACTIVE);
+      this.value[this.index].setState(State.ACTIVE);
+    }
   }
 
   public handleInput(input: string) {
+    this.pushInput(input);
+
     if (this.state == State.INACTIVE) {
       this.activate();
     }
@@ -63,13 +70,13 @@ class Word {
     this.index = 0;
     this.setCurrentLetterState(State.INACTIVE);
     this.setState(State.INACTIVE);
+    this.popInput();
   }
 
   public validate() {
-    const isCorrect = this.value.every(
-      (letter) => letter.state === State.CORRECT
-    );
-    this.setState(isCorrect ? State.CORRECT : State.INCORRECT);
+    const correct = this.value.map((s) => s.value).join("") === this.input;
+
+    this.setState(correct ? State.CORRECT : State.INCORRECT);
   }
 
   public getCurrentLetter(): Letter {
@@ -84,6 +91,18 @@ class Word {
     if (this.index < this.value.length - 1) {
       this.value[this.index + 1].setState(state);
     }
+  }
+
+  private popInput() {
+    if (this.input.length > 1) {
+      this.input = this.input.slice(0, this.input.length - 2);
+      return;
+    }
+    this.input = "";
+  }
+
+  private pushInput(char: string) {
+    this.input += char;
   }
 
   private setState(state: State) {

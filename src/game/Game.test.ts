@@ -1,0 +1,53 @@
+import Game from "./Game";
+import Word, { State } from "./Word";
+
+const createWords = (sentence: string): Array<Word> => {
+  return sentence.split(" ").map((s) => new Word(s));
+};
+
+describe("game logic", () => {
+  it("handles letter input", () => {
+    const words: Array<Word> = createWords("hello");
+    const game: Game = new Game(words);
+    expect(game.current().state).toEqual(State.ACTIVE);
+    game.handleInput("h");
+    expect(game.current().value[0].state).toEqual(State.CORRECT);
+    game.handleInput("e");
+    game.handleInput("l");
+    game.handleInput("l");
+    game.handleInput("o");
+    expect(game.current().value[4].state).toEqual(State.CORRECT);
+    expect(game.current().state).toEqual(State.CORRECT);
+  });
+
+
+  it("handles letter deletions", () => {
+    const words: Array<Word> = createWords("hello");
+    const game: Game = new Game(words);
+    game.handleInput("h");
+    expect(game.current().value[0].state).toEqual(State.CORRECT);
+    game.handleInput("Backspace");
+    expect(game.current().value[0].state).toEqual(State.ACTIVE);
+    expect(game.current().value[1].state).toEqual(State.INACTIVE);
+  });
+
+  it("handles backspace edge case", () => {
+    const words: Array<Word> = createWords("hello");
+    const game: Game = new Game(words);
+    game.handleInput("Backspace");
+    game.handleInput("Backspace");
+    game.handleInput("Backspace");
+    expect(game.current().value[0].state).toEqual(State.ACTIVE);
+  });
+
+  it("handles multiple words", () => {
+    const words: Array<Word> = createWords("hello hello");
+    const game: Game = new Game(words);
+    const input = "hello".split("");
+    input.forEach((c) => game.handleInput(c));
+    game.handleInput("Space");
+    input.forEach((c) => game.handleInput(c));
+    game.getWords().forEach((w) => expect(w.state).toBe(State.CORRECT));
+  });
+});
+
