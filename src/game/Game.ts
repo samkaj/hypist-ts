@@ -26,7 +26,18 @@ export default class Game {
     return this.words;
   }
 
+  getIndex() {
+    return this.index;
+  }
+
+  gameOver() {
+    this.gameState = GameState.FINISHED;
+  }
+
   handleInput(key: string) {
+    if (this.gameState == GameState.FINISHED) {
+      return;
+    }
     switch (key) {
       case "Backspace":
         this.getCurrentWord().handleDeletion();
