@@ -1,22 +1,25 @@
 import type Word from "./Word";
 
+export enum GameState {
+  IDLE,
+  RUNNING,
+  FINISHED
+}
+
 export default class Game {
   private words: Array<Word>;
   private index: number;
+  private gameState: GameState;
 
   constructor(words: Array<Word>) {
     this.words = words;
     this.index = 0;
     this.words[0].activate();
+    this.gameState = GameState.IDLE;
   }
 
-  current() {
+  getCurrentWord() {
     return this.words[this.index];
-  }
-
-  prev() {
-    if (this.index > 0) return this.words[this.index - 1];
-    return this.words[0];
   }
 
   getWords() {
@@ -26,7 +29,7 @@ export default class Game {
   handleInput(key: string) {
     switch (key) {
       case "Backspace":
-        this.words[this.index].handleDeletion();
+        this.getCurrentWord().handleDeletion();
         this.index--;
 
         if (this.index < 0) {
@@ -36,12 +39,12 @@ export default class Game {
 
         break;
       case "Space":
-        this.words[this.index].validate();
+        this.getCurrentWord().validate();
         this.index++;
-        this.words[this.index].activate();
+        this.getCurrentWord().activate();
         break;
       default:
-        this.words[this.index].handleInput(key);
+        this.getCurrentWord().handleInput(key);
     }
   }
 }
