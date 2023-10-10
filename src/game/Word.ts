@@ -80,9 +80,7 @@ class Word {
   }
 
   public validate() {
-    const correct = this.value.map((s) => s.value).join("") === this.input;
-
-    this.setState(correct ? State.CORRECT : State.INCORRECT);
+    this.setState(this.isCorrect() ? State.CORRECT : State.INCORRECT);
   }
 
   public getCurrentLetter(): Letter {

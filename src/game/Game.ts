@@ -1,10 +1,10 @@
 import type Word from "./Word";
+import { getRandomWord } from "./utils/WordGenerator";
 
 export enum GameState {
   IDLE,
   RUNNING,
   FINISHED,
-  STOPPED,
 }
 
 export default class Game {
@@ -37,20 +37,28 @@ export default class Game {
     this.gameState = GameState.FINISHED;
   }
 
-  startGame() {
-    this.gameState = GameState.RUNNING;
+  reset() {
+    this.gameState = GameState.IDLE;
   }
 
-  stopGame() {
-    this.gameState = GameState.STOPPED;
+  startGame() {
+    this.gameState = GameState.RUNNING;
   }
 
   getGameState() {
     return this.gameState;
   }
 
+  pushRandomWord() {
+    this.words.push(getRandomWord());
+  }
+
+  isIdle() {
+    return this.gameState === GameState.IDLE;
+  }
+
   handleInput(key: string) {
-    if (this.getGameState() === GameState.IDLE) {
+    if (this.isIdle()) {
       this.startGame();
     }
     switch (key) {
@@ -66,7 +74,8 @@ export default class Game {
         break;
       case "Escape":
       case "Tab":
-        this.stopGame();
+        this.reset();
+        break;
       case "Space":
         this.getCurrentWord().validate();
         this.index++;
