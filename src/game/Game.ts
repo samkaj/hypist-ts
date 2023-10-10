@@ -34,10 +34,15 @@ export default class Game {
     this.gameState = GameState.FINISHED;
   }
 
+  getGameState() {
+    return this.gameState;
+  }
+
+  setGameState(state: GameState) {
+    this.gameState = state;
+  }
+
   handleInput(key: string) {
-    if (this.gameState == GameState.FINISHED) {
-      return;
-    }
     switch (key) {
       case "Backspace":
         this.getCurrentWord().handleDeletion();
