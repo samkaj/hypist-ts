@@ -10,12 +10,14 @@ class Word {
   state: State;
   index: number;
   input: string;
+  correct: string;
 
   constructor(value: string) {
     this.value = value.split("").map((letter) => new Letter(letter));
     this.state = State.INACTIVE;
     this.index = 0;
     this.input = "";
+    this.correct = value;
   }
 
   public activate() {
@@ -39,7 +41,7 @@ class Word {
 
     const want = this.getCurrentLetter().value;
     this.setCurrentLetterState(
-      want === input ? State.CORRECT : State.INCORRECT
+      want === input ? State.CORRECT : State.INCORRECT,
     );
 
     if (want !== input) {
@@ -58,6 +60,10 @@ class Word {
 
   public isInactive() {
     return this.value.every((val) => val.state === State.INACTIVE);
+  }
+
+  public isCorrect() {
+    return this.input === this.correct;
   }
 
   public handleDeletion() {
@@ -81,6 +87,10 @@ class Word {
 
   public getCurrentLetter(): Letter {
     return this.value[this.index];
+  }
+
+  public getCorrect(): string {
+    return this.correct;
   }
 
   private setCurrentLetterState(state: State) {
