@@ -3,7 +3,8 @@ import type Word from "./Word";
 export enum GameState {
   IDLE,
   RUNNING,
-  FINISHED
+  FINISHED,
+  STOPPED
 }
 
 export default class Game {
@@ -39,7 +40,7 @@ export default class Game {
   }
 
   stopGame() {
-    this.gameState = GameState.IDLE;
+    this.gameState = GameState.STOPPED;
   }
 
   getGameState() {
@@ -47,6 +48,9 @@ export default class Game {
   }
 
   handleInput(key: string) {
+    if (this.getGameState() === GameState.IDLE) {
+      this.startGame();
+    }
     switch (key) {
       case "Backspace":
         this.getCurrentWord().handleDeletion();
@@ -58,6 +62,9 @@ export default class Game {
         }
 
         break;
+      case "Escape":
+      case "Tab":
+        this.stopGame();
       case "Space":
         this.getCurrentWord().validate();
         this.index++;
