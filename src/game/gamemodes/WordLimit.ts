@@ -1,6 +1,5 @@
-import Game, { GameState } from "../Game";
+import Game from "../Game";
 import type Word from "../Word";
-import { State } from "../Word";
 
 export default class WordLimitGame {
   private wordcount: number;

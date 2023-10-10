@@ -74,11 +74,11 @@ describe("handle input", () => {
     expect(anotherWord.state).toEqual(State.CORRECT);
   });
 
-  it("accepts empty words", ()=> {
+  it("accepts empty words", () => {
     const word: Word = new Word("");
     word.handleInput("a");
     expect(word.state).toEqual(State.INCORRECT);
-  })
+  });
 });
 
 describe("handle deletion", () => {
@@ -90,7 +90,7 @@ describe("handle deletion", () => {
     expect(word.index).toEqual(0);
   });
 
-  it("does not induce negative index", ()=>{
+  it("does not induce negative index", () => {
     const word: Word = new Word("hello");
     word.handleDeletion();
     expect(word.index).toEqual(0);
@@ -106,7 +106,7 @@ describe("handle deletion", () => {
     expect(word.value[0].state).toEqual(State.CORRECT);
   });
 
-  it("deactivates when whole word is deleted", ()=>{
+  it("deactivates when whole word is deleted", () => {
     const word: Word = new Word("hello");
     word.handleInput("h");
     word.handleDeletion();

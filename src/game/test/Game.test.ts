@@ -52,8 +52,12 @@ describe("game logic", () => {
     game.handleInput("h");
     expect(game.getGameState()).toBe(GameState.RUNNING);
     game.handleInput("Escape");
-    expect(game.getGameState()).toBe(GameState.STOPPED);
+    expect(game.getGameState()).toBe(GameState.IDLE);
     game.handleInput("h");
-    expect(game.getGameState()).toBe(GameState.STOPPED);
+    expect(game.getGameState()).toBe(GameState.RUNNING);
+    game.handleInput("Tab");
+    expect(game.getGameState()).toBe(GameState.IDLE);
+    game.handleInput("h");
+    expect(game.getGameState()).toBe(GameState.RUNNING);
   });
 });
