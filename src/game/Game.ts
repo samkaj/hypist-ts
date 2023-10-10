@@ -4,19 +4,21 @@ export enum GameState {
   IDLE,
   RUNNING,
   FINISHED,
-  STOPPED
+  STOPPED,
 }
 
 export default class Game {
   private words: Array<Word>;
   private index: number;
   private gameState: GameState;
+  handleGameOver: () => void;
 
-  constructor(words: Array<Word>) {
+  constructor(words: Array<Word>, handleGameOver: () => void = () => {}) {
     this.words = words;
     this.index = 0;
     this.words[0].activate();
     this.gameState = GameState.IDLE;
+    this.handleGameOver = handleGameOver;
   }
 
   getCurrentWord() {
@@ -68,7 +70,12 @@ export default class Game {
       case "Space":
         this.getCurrentWord().validate();
         this.index++;
-        this.getCurrentWord().activate();
+        if (this.index >= this.words.length - 1) {
+          this.handleGameOver();
+        }
+        if (this.getCurrentWord()) {
+          this.getCurrentWord().activate();
+        }
         break;
       default:
         this.getCurrentWord().handleInput(key);
