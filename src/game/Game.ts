@@ -34,12 +34,16 @@ export default class Game {
     this.gameState = GameState.FINISHED;
   }
 
-  getGameState() {
-    return this.gameState;
+  startGame() {
+    this.gameState = GameState.RUNNING;
   }
 
-  setGameState(state: GameState) {
-    this.gameState = state;
+  stopGame() {
+    this.gameState = GameState.IDLE;
+  }
+
+  getGameState() {
+    return this.gameState;
   }
 
   handleInput(key: string) {

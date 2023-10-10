@@ -19,7 +19,7 @@ export default class WordLimitGame {
       this.game.gameOver();
     }
     if (this.game.getGameState() === GameState.IDLE) {
-      this.game.setGameState(GameState.RUNNING);
+      this.game.startGame();
     }
     this.game.handleInput(key);
   }
