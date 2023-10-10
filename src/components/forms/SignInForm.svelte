@@ -47,7 +47,7 @@
     Not signed up?
     <a
       class="ease-in-out duration-150 text-indigo-300 hover:text-indigo-400 font-bold"
-      href="/signin"
+      href="/signup"
     >
       Create an account
     </a>

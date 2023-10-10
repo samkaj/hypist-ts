@@ -49,6 +49,12 @@ export default class Game {
     return this.gameState;
   }
 
+  private setGamemode(gamemode: Gamemode): void {
+    this.gamemode = gamemode;
+  }
+
+  
+
   handleInput(key: string) {
     if (this.getGameState() === GameState.IDLE) {
       this.startGame();
