@@ -10,6 +10,6 @@ export type User = {
 
 export type Settings = {
   gamemode: Gamemode;
-  wordCount: number;
+  amount: number;
   duration: number;
 };
