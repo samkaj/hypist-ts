@@ -13,7 +13,7 @@ export default class WordLimitGame {
       if (this.isLastWord() && this.game.getCurrentWord().isCorrect()) {
         this.game.gameOver();
       }
-    }
+    };
     this.lastWordHandled = false;
   }
 
@@ -26,12 +26,12 @@ export default class WordLimitGame {
   }
 
   handleInput(key: string): void {
-    if (key === "Space" && this.lastWordHandled) {
+    this.game.handleInput(key);
+    if (key === " " || (key === "Space" && this.lastWordHandled)) {
       this.game.gameOver();
     }
-    this.game.handleInput(key);
     this.game.handleGameOver();
-    if (key === "Space" && this.isLastWord()) {
+    if (key === " " || (key === "Space" && this.isLastWord())) {
       this.lastWordHandled = true;
     }
   }

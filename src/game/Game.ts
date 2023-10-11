@@ -29,6 +29,18 @@ export default class Game {
     return this.words;
   }
 
+  getWordValues() {
+    return this.getWords()
+      .map((w) => w.correct)
+      .join(" ");
+  }
+
+  getWordInput() {
+    return this.getWords()
+      .map((w) => w.input)
+      .join(" ");
+  }
+
   getIndex() {
     return this.index;
   }
@@ -64,13 +76,13 @@ export default class Game {
     switch (key) {
       case "Backspace":
         this.getCurrentWord().handleDeletion();
-        this.index--;
-
-        if (this.index < 0) {
-          this.index = 0;
-          this.words[this.index].activate();
+        if (this.getCurrentWord().isInactive()) {
+          this.index--;
+          if (this.index < 0) {
+            this.index = 0;
+            this.getCurrentWord().activate();
+          }
         }
-
         break;
       case "Escape":
       case "Tab":
@@ -85,6 +97,8 @@ export default class Game {
         if (this.getCurrentWord()) {
           this.getCurrentWord().activate();
         }
+        break;
+      case "Shift":
         break;
       default:
         this.getCurrentWord().handleInput(key);

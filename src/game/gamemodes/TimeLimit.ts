@@ -38,7 +38,7 @@ export default class TimeLimitGame {
       this.startGame();
     }
     this.game.handleInput(key);
-    if (key === "Space") {
+    if (key === "Space" || key === " ") {
       this.game.pushRandomWord();
     }
   }

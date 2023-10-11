@@ -41,7 +41,7 @@ class Word {
 
     const want = this.getCurrentLetter().value;
     this.setCurrentLetterState(
-      want === input ? State.CORRECT : State.INCORRECT,
+      want === input ? State.CORRECT : State.INCORRECT
     );
 
     if (want !== input) {
@@ -92,6 +92,10 @@ class Word {
   }
 
   private setCurrentLetterState(state: State) {
+    if (this.index < 0) {
+      this.value[0].setState(state);
+      return;
+    }
     this.value[this.index].setState(state);
   }
 
