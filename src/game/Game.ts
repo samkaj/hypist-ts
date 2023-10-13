@@ -1,5 +1,5 @@
 import type Word from "./Word";
-import { getRandomWord } from "./utils/WordGenerator";
+import generateWords, { getRandomWord } from "./utils/WordGenerator";
 
 export enum GameState {
   IDLE,
@@ -69,9 +69,17 @@ export default class Game {
     return this.gameState === GameState.IDLE;
   }
 
+  isOver() {
+    return this.gameState === GameState.FINISHED;
+  }
+
   handleInput(key: string) {
     if (this.isIdle()) {
       this.startGame();
+    }
+    if (key === "Escape" || key === "Tab") {
+      this.reset();
+      return;
     }
     switch (key) {
       case "Backspace":
@@ -84,14 +92,9 @@ export default class Game {
           this.getCurrentWord().activate();
         }
         break;
-      case "Escape":
-      case "Tab":
-        this.reset();
-        break;
       case " ":
         this.getCurrentWord().validate();
         this.index++;
-        console.log(this.getCurrentWord());
         if (this.index >= this.words.length - 1) {
           this.handleGameOver();
         }

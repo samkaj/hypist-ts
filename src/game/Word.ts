@@ -49,11 +49,11 @@ class Word {
     }
 
     const isLast = this.index === this.value.length - 1;
-    this.index++;
     if (isLast) {
       this.validate();
       return;
     }
+    this.index++;
 
     this.setNextLetterState(State.ACTIVE);
   }
@@ -66,21 +66,33 @@ class Word {
     return this.input === this.correct;
   }
 
+  public isCorrectSoFar() {
+    if (this.input.length > this.correct.length) {
+      return false;
+    }
+    for (let i = 0; i < this.input.length; i++) {
+      if (this.input[i] !== this.correct[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  
   public handleDeletion() {
     this.setCurrentLetterState(State.INACTIVE);
-    this.index--;
-    if (this.index >= 0) {
+    this.popInput();
+    if (this.index > 0) {
+      this.index--;
       this.setCurrentLetterState(State.ACTIVE);
       return;
     }
-    this.index = 0;
-    this.setCurrentLetterState(State.INACTIVE);
     this.setState(State.INACTIVE);
-    this.popInput();
   }
 
   public validate() {
-    this.setState(this.isCorrect() ? State.CORRECT : State.INCORRECT);
+    const state: State = this.isCorrect() ? State.CORRECT : State.INCORRECT 
+    this.setState(state);
+    this.setPreviousLetterState(state);
   }
 
   public getCurrentLetter(): Letter {
@@ -89,6 +101,13 @@ class Word {
 
   public getCorrect(): string {
     return this.correct;
+  }
+
+  private setPreviousLetterState(state: State) {
+    if (this.index <= 0) {
+      return;
+    }
+    this.value[this.index-1].setState(state);
   }
 
   private setCurrentLetterState(state: State) {
