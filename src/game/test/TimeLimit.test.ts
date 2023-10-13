@@ -27,10 +27,10 @@ describe("time limit", () => {
     );
     expect(game.getGame().getWords().length === 2);
     "hello".split("").forEach((c) => game.handleInput(c));
-    game.handleInput("Space");
-    game.handleInput("Space");
-    game.handleInput("Space");
-    game.handleInput("Space");
+    game.handleInput(" ");
+    game.handleInput(" ");
+    game.handleInput(" ");
+    game.handleInput(" ");
     expect(game.getGame().getWords().length === 6);
   });
 });

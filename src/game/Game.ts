@@ -80,17 +80,18 @@ export default class Game {
           this.index--;
           if (this.index < 0) {
             this.index = 0;
-            this.getCurrentWord().activate();
           }
+          this.getCurrentWord().activate();
         }
         break;
       case "Escape":
       case "Tab":
         this.reset();
         break;
-      case "Space":
+      case " ":
         this.getCurrentWord().validate();
         this.index++;
+        console.log(this.getCurrentWord());
         if (this.index >= this.words.length - 1) {
           this.handleGameOver();
         }
@@ -101,7 +102,9 @@ export default class Game {
       case "Shift":
         break;
       default:
-        this.getCurrentWord().handleInput(key);
+        if (key.length === 1) {
+          this.getCurrentWord().handleInput(key);
+        }
     }
   }
 }

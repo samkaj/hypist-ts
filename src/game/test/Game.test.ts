@@ -41,7 +41,7 @@ describe("game logic", () => {
     const game: Game = new Game(words);
     const input = "hello".split("");
     input.forEach((c) => game.handleInput(c));
-    game.handleInput("Space");
+    game.handleInput(" ");
     input.forEach((c) => game.handleInput(c));
     game.getWords().forEach((w) => expect(w.state).toBe(State.CORRECT));
   });

@@ -26,12 +26,12 @@ export default class WordLimitGame {
   }
 
   handleInput(key: string): void {
-    this.game.handleInput(key);
-    if (key === " " || (key === "Space" && this.lastWordHandled)) {
+    this.getGame().handleInput(key);
+    if (key === " "  && this.lastWordHandled) {
       this.game.gameOver();
     }
     this.game.handleGameOver();
-    if (key === " " || (key === "Space" && this.isLastWord())) {
+    if (key === " " && this.isLastWord()) {
       this.lastWordHandled = true;
     }
   }
