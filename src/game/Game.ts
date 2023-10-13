@@ -1,5 +1,5 @@
 import type Word from "./Word";
-import generateWords, { getRandomWord } from "./utils/WordGenerator";
+import { getRandomWord } from "./utils/WordGenerator";
 
 export enum GameState {
   IDLE,
@@ -8,106 +8,108 @@ export enum GameState {
 }
 
 export default class Game {
-  private words: Array<Word>;
+  words: Array<Word>;
+  handleGameOver: () => void;
   private index: number;
   private gameState: GameState;
-  handleGameOver: () => void;
 
   constructor(words: Array<Word>, handleGameOver: () => void = () => {}) {
-    this.words = words;
+    this.words = words.length > 0 ? words : [getRandomWord()];
     this.index = 0;
     this.words[0].activate();
     this.gameState = GameState.IDLE;
     this.handleGameOver = handleGameOver;
   }
 
-  getCurrentWord() {
-    return this.words[this.index];
-  }
-
-  getWords() {
-    return this.words;
-  }
-
-  getWordValues() {
-    return this.getWords()
-      .map((w) => w.correct)
-      .join(" ");
-  }
-
-  getWordInput() {
-    return this.getWords()
-      .map((w) => w.input)
-      .join(" ");
-  }
-
-  getIndex() {
-    return this.index;
-  }
-
-  gameOver() {
-    this.gameState = GameState.FINISHED;
-  }
-
-  reset() {
-    this.gameState = GameState.IDLE;
-  }
-
-  startGame() {
+  public startGame(): void {
     this.gameState = GameState.RUNNING;
   }
 
-  getGameState() {
-    return this.gameState;
+  public reset(): void {
+    this.gameState = GameState.IDLE;
   }
 
-  pushRandomWord() {
-    this.words.push(getRandomWord());
+  public gameOver(): void {
+    this.gameState = GameState.FINISHED;
   }
 
-  isIdle() {
+  public isIdle(): boolean {
     return this.gameState === GameState.IDLE;
   }
 
-  isOver() {
+  public isOver(): boolean {
     return this.gameState === GameState.FINISHED;
   }
 
-  handleInput(key: string) {
+  public getGameState(): GameState {
+    return this.gameState;
+  }
+
+  public pushRandomWord(): void {
+    this.words.push(getRandomWord());
+  }
+
+  public getWordValues(): string {
+    return this.words.map((word) => word.correct).join(" ");
+  }
+
+  public getWordInput(): string {
+    return this.words.map((word) => word.input).join("");
+  }
+
+  public getIndex(): number {
+    return this.index;
+  }
+
+  getCurrentWord(): Word {
+    return this.words[this.index] || this.words[this.words.length - 1];
+  }
+
+  public handleInput(key: string): void {
     if (this.isIdle()) {
       this.startGame();
     }
-    if (key === "Escape" || key === "Tab") {
-      this.reset();
-      return;
-    }
+
     switch (key) {
+      case "Escape":
+      case "Tab":
+        this.reset();
+        return;
       case "Backspace":
-        this.getCurrentWord().handleDeletion();
-        if (this.getCurrentWord().isInactive()) {
-          this.index--;
-          if (this.index < 0) {
-            this.index = 0;
-          }
-          this.getCurrentWord().activate();
-        }
+        this.handleBackspace();
         break;
       case " ":
-        this.getCurrentWord().validate();
-        this.index++;
-        if (this.index >= this.words.length - 1) {
-          this.handleGameOver();
-        }
-        if (this.getCurrentWord()) {
-          this.getCurrentWord().activate();
-        }
-        break;
-      case "Shift":
+        this.handleSpace();
         break;
       default:
-        if (key.length === 1) {
-          this.getCurrentWord().handleInput(key);
-        }
+        this.handleCharacterInput(key);
     }
+  }
+
+  private handleBackspace(): void {
+    const currentWord = this.getCurrentWord();
+    currentWord.handleDeletion();
+
+    if (currentWord.isInactive()) {
+      this.index = Math.max(this.index - 1, 0);
+      this.getCurrentWord().activate();
+    }
+  }
+
+  private handleSpace(): void {
+    this.getCurrentWord().validate();
+    this.index++;
+
+    if (this.index >= this.words.length) {
+      this.handleGameOver();
+    } else {
+      this.getCurrentWord().activate();
+    }
+  }
+
+  private handleCharacterInput(key: string): void {
+    if (key.length !== 1 || key === "Shift") return;
+
+    this.getCurrentWord().handleInput(key);
   }
 }

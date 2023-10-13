@@ -43,7 +43,7 @@ describe("game logic", () => {
     input.forEach((c) => game.handleInput(c));
     game.handleInput(" ");
     input.forEach((c) => game.handleInput(c));
-    game.getWords().forEach((w) => expect(w.state).toBe(State.CORRECT));
+    game.words.forEach((w) => expect(w.state).toBe(State.CORRECT));
   });
 
   it("stops game", () => {

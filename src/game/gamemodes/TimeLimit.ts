@@ -11,39 +11,35 @@ export default class TimeLimitGame {
     this.timer = new Timer(duration, () => this.handleTimeUp());
   }
 
-  getGame() {
+  public getGame() {
     return this.game;
   }
 
-  startGame() {
+  public startGame(): void {
     this.game.startGame();
     this.timer.start();
   }
 
-  stopGame() {
+  public stopGame(): void {
     this.game.reset();
     this.timer.stop();
   }
 
-  handleTimeUp() {
+  public handleInput(key: string): void {
+    if (this.game.isIdle()) this.startGame();
+    this.game.handleInput(key);
+    if (key === " ") this.game.pushRandomWord();
+  }
+
+  public getRemainingTime(): number {
+    return this.timer.getRemainingTime();
+  }
+
+  private handleTimeUp(): void {
     this.game.gameOver();
   }
 
-  handleGameOver() {
+  private handleGameOver(): void {
     this.timer.stop();
-  }
-
-  handleInput(key: string) {
-    if (this.getGame().isIdle()) {
-      this.startGame();
-    }
-    this.game.handleInput(key);
-    if (key === " ") {
-      this.game.pushRandomWord();
-    }
-  }
-
-  getRemainingTime() {
-    return this.timer.getRemainingTime();
   }
 }

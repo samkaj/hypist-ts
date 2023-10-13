@@ -25,12 +25,12 @@ describe("time limit", () => {
       createWords("hello world"),
       1
     );
-    expect(game.getGame().getWords().length === 2);
+    expect(game.getGame().words.length === 2);
     "hello".split("").forEach((c) => game.handleInput(c));
     game.handleInput(" ");
     game.handleInput(" ");
     game.handleInput(" ");
     game.handleInput(" ");
-    expect(game.getGame().getWords().length === 6);
+    expect(game.getGame().words.length === 6);
   });
 });
