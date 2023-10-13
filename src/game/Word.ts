@@ -77,7 +77,7 @@ class Word {
     }
     return true;
   }
-  
+
   public handleDeletion() {
     this.setCurrentLetterState(State.INACTIVE);
     this.popInput();
@@ -90,7 +90,7 @@ class Word {
   }
 
   public validate() {
-    const state: State = this.isCorrect() ? State.CORRECT : State.INCORRECT 
+    const state: State = this.isCorrect() ? State.CORRECT : State.INCORRECT;
     this.setState(state);
     this.setPreviousLetterState(state);
   }
@@ -107,7 +107,7 @@ class Word {
     if (this.index <= 0) {
       return;
     }
-    this.value[this.index-1].setState(state);
+    this.value[this.index - 1].setState(state);
   }
 
   private setCurrentLetterState(state: State) {
@@ -125,11 +125,7 @@ class Word {
   }
 
   private popInput() {
-    if (this.input.length > 1) {
-      this.input = this.input.slice(0, this.input.length - 2);
-      return;
-    }
-    this.input = "";
+    this.input = this.input.slice(0, this.input.length - 1);
   }
 
   private pushInput(char: string) {
