@@ -1,11 +1,11 @@
-import Game, { GameState } from "../Game";
+import BaseGame, { GameState } from "../Game";
 import Word, { State } from "../Word";
 import { createWords } from "./TestHelper";
 
 describe("game logic", () => {
   it("handles letter input", () => {
     const words: Array<Word> = createWords("hello");
-    const game: Game = new Game(words);
+    const game: BaseGame = new BaseGame(words);
     expect(game.getCurrentWord().state).toEqual(State.ACTIVE);
     game.handleInput("h");
     expect(game.getCurrentWord().value[0].state).toEqual(State.CORRECT);
@@ -13,13 +13,14 @@ describe("game logic", () => {
     game.handleInput("l");
     game.handleInput("l");
     game.handleInput("o");
+    game.handleInput(" ");
     expect(game.getCurrentWord().value[4].state).toEqual(State.CORRECT);
     expect(game.getCurrentWord().state).toEqual(State.CORRECT);
   });
 
   it("handles letter deletions", () => {
     const words: Array<Word> = createWords("hello");
-    const game: Game = new Game(words);
+    const game: BaseGame = new BaseGame(words);
     game.handleInput("h");
     expect(game.getCurrentWord().value[0].state).toEqual(State.CORRECT);
     game.handleInput("Backspace");
@@ -29,7 +30,7 @@ describe("game logic", () => {
 
   it("handles backspace edge case", () => {
     const words: Array<Word> = createWords("hello");
-    const game: Game = new Game(words);
+    const game: BaseGame = new BaseGame(words);
     game.handleInput("Backspace");
     game.handleInput("Backspace");
     game.handleInput("Backspace");
@@ -38,17 +39,18 @@ describe("game logic", () => {
 
   it("handles multiple words", () => {
     const words: Array<Word> = createWords("hello hello");
-    const game: Game = new Game(words);
+    const game: BaseGame = new BaseGame(words);
     const input = "hello".split("");
     input.forEach((c) => game.handleInput(c));
     game.handleInput(" ");
     input.forEach((c) => game.handleInput(c));
+    game.handleInput(" ");
     game.words.forEach((w) => expect(w.state).toBe(State.CORRECT));
   });
 
   it("stops game", () => {
     const words: Array<Word> = createWords("hello hello");
-    const game: Game = new Game(words);
+    const game: BaseGame = new BaseGame(words);
     game.handleInput("h");
     expect(game.getGameState()).toBe(GameState.RUNNING);
     game.handleInput("Escape");

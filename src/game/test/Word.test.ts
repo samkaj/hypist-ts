@@ -3,7 +3,7 @@ import Word, { State } from "../Word";
 describe("handle input", () => {
   it("constructor", () => {
     const word: Word = new Word("hello");
-    expect(word.value.length).toEqual(5);
+    expect(word.value.length).toEqual(6);
     expect(word.isInactive()).toBeTruthy();
   });
 
@@ -14,6 +14,7 @@ describe("handle input", () => {
     word.handleInput("l");
     word.handleInput("l");
     word.handleInput("o");
+    word.handleInput(" ");
     expect(word.state).toEqual(State.CORRECT);
   });
 
@@ -24,6 +25,7 @@ describe("handle input", () => {
     word.handleInput("e");
     word.handleInput("l");
     word.handleInput("o");
+    word.handleInput(" ");
     expect(word.state).toEqual(State.INCORRECT);
   });
 
@@ -63,6 +65,7 @@ describe("handle input", () => {
     word.handleInput("l");
     word.handleInput("l");
     word.handleInput("o");
+    word.handleInput(" ");
     expect(word.state).toEqual(State.INCORRECT);
 
     const anotherWord: Word = new Word("Hello");
@@ -71,6 +74,7 @@ describe("handle input", () => {
     anotherWord.handleInput("l");
     anotherWord.handleInput("l");
     anotherWord.handleInput("o");
+    anotherWord.handleInput(" ");
     expect(anotherWord.state).toEqual(State.CORRECT);
   });
 
@@ -86,13 +90,13 @@ describe("handle deletion", () => {
     const word: Word = new Word("hello");
     word.handleInput("h");
     expect(word.index).toEqual(1);
-    word.handleDeletion();
+    word.handleBackspace();
     expect(word.index).toEqual(0);
   });
 
   it("does not induce negative index", () => {
     const word: Word = new Word("hello");
-    word.handleDeletion();
+    word.handleBackspace();
     expect(word.index).toEqual(0);
   });
 
@@ -100,17 +104,17 @@ describe("handle deletion", () => {
     const word: Word = new Word("hello");
     word.handleInput("h");
     word.handleInput("e");
-    word.handleDeletion();
+    word.handleBackspace();
     expect(word.getCurrentLetter().value).toEqual("e");
     expect(word.getCurrentLetter().state).toEqual(State.ACTIVE);
     expect(word.value[0].state).toEqual(State.CORRECT);
   });
 
   it("deactivates when whole word is deleted", () => {
-    const word: Word = new Word("hello");
+    const word: Word = new Word("hello world");
     word.handleInput("h");
-    word.handleDeletion();
-    word.handleDeletion();
+    word.handleBackspace();
+    word.handleBackspace();
     expect(word.state).toBe(State.INACTIVE);
   });
 });

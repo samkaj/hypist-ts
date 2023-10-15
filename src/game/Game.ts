@@ -7,11 +7,18 @@ export enum GameState {
   FINISHED,
 }
 
-export default class Game {
+export interface Game {
+  game: BaseGame;
+  handleInput(key: string): void;
+}
+
+
+export default class BaseGame {
   words: Array<Word>;
   handleGameOver: () => void;
   private index: number;
   private gameState: GameState;
+  private input: string;
 
   constructor(words: Array<Word>, handleGameOver: () => void = () => {}) {
     this.words = words.length > 0 ? words : [getRandomWord()];
@@ -19,6 +26,7 @@ export default class Game {
     this.words[0].activate();
     this.gameState = GameState.IDLE;
     this.handleGameOver = handleGameOver;
+    this.input = "";
   }
 
   public startGame(): void {
@@ -54,7 +62,7 @@ export default class Game {
   }
 
   public getWordInput(): string {
-    return this.words.map((word) => word.input).join("");
+    return this.input;
   }
 
   public getIndex(): number {
@@ -88,7 +96,9 @@ export default class Game {
 
   private handleBackspace(): void {
     const currentWord = this.getCurrentWord();
-    currentWord.handleDeletion();
+    currentWord.handleBackspace();
+    this.input = this.input.slice(0, -1);
+
 
     if (currentWord.isInactive()) {
       this.index = Math.max(this.index - 1, 0);
@@ -97,6 +107,7 @@ export default class Game {
   }
 
   private handleSpace(): void {
+    this.getCurrentWord().pushInput(" ");
     this.getCurrentWord().validate();
     this.index++;
 
@@ -110,6 +121,7 @@ export default class Game {
   private handleCharacterInput(key: string): void {
     if (key.length !== 1 || key === "Shift") return;
 
+    this.input += key;
     this.getCurrentWord().handleInput(key);
   }
 }

@@ -1,13 +1,13 @@
-import Game from "../Game";
+import BaseGame, { type Game } from "../Game";
 import type Word from "../Word";
 import Timer from "../utils/Timer";
 
-export default class TimeLimitGame {
-  private game: Game;
+export default class TimeLimitGame implements Game {
+  game: BaseGame;
   private timer: Timer;
 
   constructor(words: Array<Word>, duration: number) {
-    this.game = new Game(words, () => this.handleGameOver());
+    this.game = new BaseGame(words, () => this.handleGameOver());
     this.timer = new Timer(duration, () => this.handleTimeUp());
   }
 
