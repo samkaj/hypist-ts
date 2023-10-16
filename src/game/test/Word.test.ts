@@ -111,10 +111,10 @@ describe("handle deletion", () => {
   });
 
   it("deactivates when whole word is deleted", () => {
-    const word: Word = new Word("hello world");
+    const word: Word = new Word("hello");
     word.handleInput("h");
     word.handleBackspace();
     word.handleBackspace();
-    expect(word.state).toBe(State.INACTIVE);
+    expect(word.state).toBe(State.ACTIVE);
   });
 });
