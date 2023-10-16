@@ -29,13 +29,21 @@ class Word {
   extra: string;
 
   constructor(value: string) {
-    this.value = value.split("").map((letter) => new Letter(letter)); 
+    this.value = value.split("").map((letter) => new Letter(letter));
     this.value.push(new Letter(" "));
     this.state = State.INACTIVE;
     this.index = 0;
     this.input = "";
     this.correct = value + " ";
     this.extra = "";
+  }
+
+  public reset(): void {
+    this.input = "";
+    this.index = 0;
+    this.extra = "";
+    this.state = State.INACTIVE;
+    this.value.forEach((letter) => letter.setState(State.INACTIVE));
   }
 
   public activate(): void {
@@ -46,9 +54,51 @@ class Word {
   }
 
   public handleInput(input: string): void {
+    if (input.length > 1) {
+      console.error("handleInput only accepts single characters!");
+      return;
+    }
+
     this.pushInput(input);
     if (this.state == State.INACTIVE) this.activate();
     this.processCurrentInput(input);
+  }
+
+  public handleBackspace(): void {
+    if (this.extra.length > 0 || this.input.length === 0) {
+      this.extra = this.extra.slice(0, -1);
+      return;
+    }
+
+    this.setCurrentLetterState(State.INACTIVE);
+    this.popInput();
+    if (this.index > 0) {
+      this.index--;
+      this.setCurrentLetterState(State.ACTIVE);
+    } else {
+      this.setState(State.INACTIVE);
+    }
+  }
+
+  private processCurrentInput(input: string): void {
+    if (this.input.length > this.correct.length) {
+      this.extra += input;
+      this.setState(State.INCORRECT);
+      return;
+    }
+
+    const expectedLetter = this.getCurrentLetter().value;
+    const currentState =
+      expectedLetter === input ? State.CORRECT : State.INCORRECT;
+    this.setCurrentLetterState(currentState);
+
+    if (currentState === State.CORRECT && this.index < this.value.length - 1) {
+      this.setNextLetterState(State.ACTIVE);
+    }
+
+    if (expectedLetter !== input) this.setState(State.INCORRECT);
+    if (this.index === this.value.length - 1) this.validate();
+    else this.index++;
   }
 
   public isInactive(): boolean {
@@ -67,26 +117,6 @@ class Word {
     return true;
   }
 
-  public handleBackspace(): void {
-    if (this.extra.length > 0) {
-      this.extra = this.extra.slice(0, -1);
-      return;
-    }
-
-    this.setCurrentLetterState(State.INACTIVE);
-    this.popInput();
-    if (this.index > 0) {
-      this.index--;
-      this.setCurrentLetterState(State.ACTIVE);
-    } else if (this.index === 0){
-      this.setCurrentLetterState(State.INACTIVE);
-      this.setState(State.INACTIVE);
-    }
-    else {
-      this.setState(State.INACTIVE);
-    }
-  }
-
   public validate(): void {
     const newState = this.isCorrect() ? State.CORRECT : State.INCORRECT;
     this.setState(newState);
@@ -95,11 +125,6 @@ class Word {
 
   public getCurrentLetter(): Letter {
     return this.value[this.index];
-  }
-
-  private setPreviousLetterState(state: State): void {
-    if (this.index <= 0) return;
-    this.value[this.index - 1].setState(state);
   }
 
   private setCurrentLetterState(state: State): void {
@@ -122,25 +147,6 @@ class Word {
 
   private setState(state: State): void {
     this.state = state;
-  }
-
-  private processCurrentInput(input: string): void {
-    if (this.input.length > this.correct.length) {
-      this.extra += input;
-      this.setState(State.INCORRECT);
-      return;
-    }
-
-    const expectedLetter = this.getCurrentLetter().value;
-    const currentState =
-      expectedLetter === input ? State.CORRECT: State.INCORRECT;
-    this.setCurrentLetterState(currentState);
-    this.setNextLetterState(State.ACTIVE);
-
-    if (expectedLetter !== input) this.setState(State.INCORRECT);
-    if (this.index === this.value.length - 1) this.validate();
-    else this.index++;
-
   }
 }
 
